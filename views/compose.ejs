@@ -1,0 +1,21 @@
+<%- include("partials/header"); -%>
+  <form action="/compose" method="post" id="composeForm">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" id="title" name="title" placeholder="Note title" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control" id="description" name="description" rows="3"
+        placeholder="Note description"></textarea>
+    </div>
+    <hr>
+    <div class="form-group">
+      <p>To-Dos <button type="button" class="btn btn-success badge badge-pill" id="addTodoBtn">+</button>
+      </p>
+    </div>
+    <div id="todoInputList">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <%- include("partials/footer"); -%>

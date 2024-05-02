@@ -1,0 +1,44 @@
+<%- include("partials/header"); -%>
+    <% if (notes.length> 0) { %>
+        <div class="row d-flex flex-row justify-content-evenly">
+            <% for (note of notes) { %>
+                <div class="card col-10 col-sm-6 col-md-4">
+                    <div class="ring-left"></div>
+                    <div class="ring-right"></div>
+                    <div class="card-body">
+                        <h5 class="card-title"><a class="text-reset" href="/notes/<%= note._id %>">
+                                <%= note.title %>
+                            </a></h5>
+                        <% if(note.description) { %>
+                            <small class="text-secondary">
+                                <%= note.description %>
+                            </small>
+                            <% } %>
+                    </div>
+
+                    <% if(note.todos.length> 0) { %>
+                        <ul class="list-group list-group-flush">
+                            <% for (t of note.todos) { %>
+                                <li class="list-group-item">
+                                    <span <% if (t.todoCompleted){ %>
+                                        class="text-decoration-line-through text-secondary"
+                                        <% } else if (t.todoDue.getTime() < new Date().getTime()) { %>
+                                            class="text-danger" <% } %>
+                                                >
+                                                <%= t.todoText %>
+                                    </span>
+                                    <% if (t.todoCompleted){ %><i class="text-success bi bi-check"></i>
+                                        <% } else if (t.todoDue.getTime() < new Date().getTime()) { %>
+                                            <i class="bi bi-exclamation-triangle text-danger"></i>
+                                            <% } %>
+                                </li>
+                                <% } %>
+                        </ul>
+                        <% } %>
+                </div>
+                <% } %>
+        </div>
+        <% } else { %>
+            <p>No notes to display. To create a new note, <a href="/compose">click here</a>.</p>
+            <% } %>
+                <%- include("partials/footer"); -%>

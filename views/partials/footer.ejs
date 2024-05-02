@@ -1,0 +1,95 @@
+</div>
+</main>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        $('#searchForm').on('submit', function (e) {
+            e.preventDefault(); // Prevent the form from submitting traditionally
+            var searchText = $('#searchInput').val();
+            if (searchText.length > 2) {
+                searchPosts(searchText); // Call the search function
+            }
+        });
+
+        $('#searchInput').on('input', function () {
+            var searchText = $(this).val();
+            if (searchText.length > 2) {
+                searchPosts(searchText); // Call the search function
+            } else {
+                $('#resultList').empty().hide();
+            }
+        });
+
+        function searchPosts(searchText) {
+            $.ajax({
+                url: '/search',
+                type: 'GET',
+                data: { query: searchText },
+                success: function (data) {
+                    $('#resultList').empty();
+                    if (data.length > 0) {
+                        data.forEach(function (item) {
+                            var encodedTitle = encodeURIComponent(item.title);
+                            var link = `<a class="list-group-item list-group-item-action" href="/notes/${item._id}">${item.title}</a>`;
+                            $('#resultList').append(link);
+                        });
+                        $('#resultList').show();
+                    } else {
+                        $('#resultList').hide();
+                    }
+                },
+                error: function (error) {
+                    console.error('Error fetching search results:', error);
+                    $('#resultList').empty().hide();
+                }
+            });
+        }
+    });
+
+    //Code to manage the add onclick function to the buttons to remove a to-do input
+    //To be called whenever the + button is pressed, in order to connect the newly added Remove button to its approrpiate onclick function
+    function connectRemoveBtns() {
+        let todoBtns = document.querySelectorAll(".removeTodoBtn");
+
+        for (btn of todoBtns) {
+            btn.onclick = function () {
+                let parentTodo = btn.parentElement.parentElement;
+                const todoInputList = document.querySelector("#todoInputList");
+                todoInputList.removeChild(parentTodo);
+            }
+        }
+    }
+
+    //Code to manage the + button (add todo)
+    const addBtn = document.getElementById("addTodoBtn");
+    if (addBtn) {
+        addBtn.onclick = function () {
+            const todoInputList = document.querySelector("#todoInputList");
+            const newDiv = document.createElement("div");
+            newDiv.classList.add("row", "form-group", "todoInputRow");
+            newDiv.innerHTML = '<div class="col"> \
+                                    <label for="todoText">Description</label> \
+                                    <input type="text" class="form-control" placeholder="To-Do description" required name="todoText"> \
+                                </div> \
+                                <div class="col"> \
+                                    <label for="todoDue">Due date</label> \
+                                    <input type="date" class="form-control" placeholder="Due date" required name="todoDue"> \
+                                </div> \
+                                <div class ="col"> \
+                                    <button type="button" class="removeTodoBtn btn btn-danger badge badge-pill h-100"><i class="bi bi-trash"></i></button> \
+                                </div>';
+            const dateInput = newDiv.querySelector("input[type='date']");
+            dateInput.min = new Date().toISOString().split("T")[0];
+            console.log(dateInput.min);
+            todoInputList.appendChild(newDiv);
+            connectRemoveBtns();
+        }
+    }
+
+</script>
+</body>
+
+</html>
