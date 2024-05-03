@@ -49,26 +49,28 @@
         }
     });
 
-    //Code to manage the add onclick function to the buttons to remove a to-do input
-    //To be called whenever the + button is pressed, in order to connect the newly added Remove button to its approrpiate onclick function
+    //Code to manage the add onclick function to the buttons to remove a to-do input row (NOT the delete existing to-do button)
+    //To be called whenever the + button is pressed, in order to connect the newly added Remove button to its appropriate onclick function
+    //Used for the trash icon buttons in both /note/ and /compose/
     function connectRemoveBtns() {
         let todoBtns = document.querySelectorAll(".removeTodoBtn");
 
         for (btn of todoBtns) {
             btn.onclick = function () {
-                let parentTodo = btn.parentElement.parentElement;
+                let parentTodo = btn.parentElement.parentElement; //parentTodo is the todo input row containing the trash button the user clicked
                 const todoInputList = document.querySelector("#todoInputList");
-                todoInputList.removeChild(parentTodo);
+                todoInputList.removeChild(parentTodo); //Remove the corresponding todo input row from the list of todo input rows
             }
         }
     }
 
-    //Code to manage the + button (add todo)
+    //Code to manage the + button (add todo input row)
+    //Used for the + button in both /note/ and /compose/
     const addBtn = document.getElementById("addTodoBtn");
     if (addBtn) {
         addBtn.onclick = function () {
             const todoInputList = document.querySelector("#todoInputList");
-            const newDiv = document.createElement("div");
+            const newDiv = document.createElement("div"); //New todo input row
             newDiv.classList.add("row", "form-group", "todoInputRow");
             newDiv.innerHTML = '<div class="col"> \
                                     <label for="todoText">Description</label> \
@@ -82,10 +84,9 @@
                                     <button type="button" class="removeTodoBtn btn btn-danger badge badge-pill h-100"><i class="bi bi-trash"></i></button> \
                                 </div>';
             const dateInput = newDiv.querySelector("input[type='date']");
-            dateInput.min = new Date().toISOString().split("T")[0];
-            console.log(dateInput.min);
-            todoInputList.appendChild(newDiv);
-            connectRemoveBtns();
+            dateInput.min = new Date().toISOString().split("T")[0]; //Set today as the earliest selectable date; remove information about the time
+            todoInputList.appendChild(newDiv); //Insert new todo input row into the list of todo input rows list
+            connectRemoveBtns(); //Connect the trash icon button to its onclick function
         }
     }
 

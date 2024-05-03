@@ -5,6 +5,7 @@ body {
 #navbar {
     background-color: #bc6c25;
     border-radius: 0 0 .5rem .5rem;
+    /*Rounded corners on the bottom*/
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.534);
 }
 
@@ -19,6 +20,7 @@ body {
 
 main {
     padding-top: 80px;
+    /*Navbar is fixed, so we need to make the main content have some top padding for it to not be covered by the navbar*/
     padding-bottom: 70px;
     color: #fefae0;
     font-family: "Karla", sans-serif;
@@ -108,6 +110,7 @@ hr {
 
 .todoInputRow:last-child {
     margin-bottom: 11px;
+    /*Extra space between the last todoInputRow and the submit button*/
 }
 
 

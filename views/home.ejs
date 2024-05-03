@@ -6,20 +6,27 @@
                     <div class="ring-left"></div>
                     <div class="ring-right"></div>
                     <div class="card-body">
+
+                        <!--Note title-->
                         <h5 class="card-title"><a class="text-reset" href="/notes/<%= note._id %>">
                                 <%= note.title %>
                             </a></h5>
+
+                        <!--Note description (if any)-->
                         <% if(note.description) { %>
                             <small class="text-secondary">
                                 <%= note.description %>
                             </small>
-                            <% } %>
+                        <% } %>
                     </div>
 
+                    <!--List of todos (if any)-->
                     <% if(note.todos.length> 0) { %>
                         <ul class="list-group list-group-flush">
                             <% for (t of note.todos) { %>
                                 <li class="list-group-item">
+                                    <!--Each todo's description will be grey, strike-through and followed by a green check if completed;-->
+                                    <!--otherwise, if the due date is in the past, text will be red and followed by a red ! icon-->
                                     <span <% if (t.todoCompleted){ %>
                                         class="text-decoration-line-through text-secondary"
                                         <% } else if (t.todoDue.getTime() < new Date().getTime()) { %>

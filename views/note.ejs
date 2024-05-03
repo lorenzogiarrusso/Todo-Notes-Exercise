@@ -9,13 +9,18 @@
                 <button class="btn btn-danger badge badge-pill">Delete note</button>
             </form>
             <hr>
-            <% let i=0; %>
+            <% let i=0; %><!--Used to keep track of the to-do indexes in the following for...of loop-->
                 <h4>To-Dos</h4>
                 <% if (todos.length> 0) { %>
                     <% for(t of todos) { %>
                         <div class="form-check">
+
+                            <!--Todo's checkbox; checked if todo has been completed-->
                             <input class="form-check-input todo-complete-check" type="checkbox" value=""
                                 id="check<%=i%>" <% if(t.todoCompleted){ %> checked <% } %>>
+
+                                <!--Label for checkbox; strike-through and greyed out if completed-->
+                                <!--The span containing the due date will be red and contain a ! icon if the todo has not been completed and the due date is in the past, i.e. (!t.todoCompleted && t.todoDue.getTime() < new Date().getTime())-->
                                 <label
                                     class="form-check-label <%if (t.todoCompleted){%> text-decoration-line-through text-secondary <% } %>"
                                     for="check<%=i%>" id="checkLabel<%=i%>">
@@ -35,40 +40,45 @@
                                 </label>
                         </div>
                         <% i++; %>
-                            <% } %>
-                                <% } %>
-                                    <button type="button" class="btn btn-success mt-1 mb-2 badge badge-pill"
-                                        id="addTodoBtn">+</button>
+                    <% } %>
+                <% } %>
+                <button type="button" class="btn btn-success mt-1 mb-2 badge badge-pill" id="addTodoBtn">+</button>
 
 
-                                    <form action="/notes/<%= id %>/addTodos" method="post" id="addTodosForm">
-                                        <div class="form-group">
-                                            <div id="todoInputList"></div>
-                                            <button type="submit" class="btn btn-primary badge badge-pill"
-                                                id="sendTodosBtn">Update To-Dos</button>
-                                        </div>
-                                    </form>
+                <form action="/notes/<%= id %>/addTodos" method="post" id="addTodosForm">
+                    <div class="form-group">
+                        <div id="todoInputList"></div>
+                        <button type="submit" class="btn btn-primary badge badge-pill" id="sendTodosBtn">Update To-Dos</button>
+                    </div>
+                </form>
 
-                                    <script>
-                                        const checks = document.querySelectorAll(".todo-complete-check");
-                                        if (checks) {
-                                            for (let i = 0; i < checks.length; i++) {
-                                                let check = checks[i];
-                                                check.addEventListener("change", function () {
-                                                    const correspondingLabel = this.nextElementSibling;
-                                                    correspondingLabel.classList.toggle("text-decoration-line-through");
-                                                    correspondingLabel.classList.toggle("text-secondary");
-                                                    fetch(`/notes/<%=id%>/toggleTodo/${i}`, {
-                                                        method: "POST",
-                                                        body: JSON.stringify({
-                                                            check: this.checked
-                                                        }),
-                                                        headers: {
-                                                            "Content-type": "application/json; charset=UTF-8"
-                                                        }
-                                                    });
-                                                });
+                
+               <script>
+                    /*Script that adds an event listener to each checkbox to make it send a POST fetch when it is clicked. Index.js manages this POST fetch to update the completed status of the todo.*/
+                    const checks = document.querySelectorAll(".todo-complete-check");
+                    if (checks) {
+                        for (let i = 0; i < checks.length; i++) {
+                            let check = checks[i];
+                                /*Add event listener to each to-do checkbox*/
+                                check.addEventListener("change", function () {
+                                        const correspondingLabel = this.nextElementSibling;
+
+                                        /*On the corresponding label, toggle the classes to make the text grey and strike-through (or not) depending on completion state*/
+                                        correspondingLabel.classList.toggle("text-decoration-line-through");
+                                        correspondingLabel.classList.toggle("text-secondary");
+
+
+                                        fetch(`/notes/<%=id%>/toggleTodo/${i}`, {
+                                            method: "POST",
+                                            body: JSON.stringify({
+                                                check: this.checked
+                                            }),
+                                            headers: {
+                                                "Content-type": "application/json; charset=UTF-8"
                                             }
-                                        }
-                                    </script>
-                                    <%- include("partials/footer"); -%>
+                                        });
+                            });
+                        }
+                    }
+                </script>
+<%- include("partials/footer"); -%>
