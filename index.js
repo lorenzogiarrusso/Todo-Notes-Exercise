@@ -197,5 +197,5 @@ app.post("/notes/:noteId/toggleTodo/:index", async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server listening on localhost/${port}`);
+    console.log(`Server listening on http://localhost:${port}`);
 });
